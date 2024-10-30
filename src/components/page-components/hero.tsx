@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
 import { Section } from '@/components/ui/section';
