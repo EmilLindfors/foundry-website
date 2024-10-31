@@ -1,0 +1,35 @@
+{
+  "posts": [
+    {
+      "title": "The AI Revolution: Understanding Hype, Reality, and the Path Forward",
+      "date": "2024-03-20T12:00:00Z",
+      "slug": "first",
+      "description": "In an era of unprecedented AI advancement, separating genuine technological progress from inflated expectations has become increasingly crucial. This article examines the dynamics of AI hype cycles, drawing parallels with previous technological revolutions while highlighting unique aspects of the current AI wave. By exploring both commercial and conceptual dimensions of AI hype, the piece offers a balanced framework for understanding and navigating this complex landscape. Rather than taking extreme positions, it advocates for a nuanced approach that acknowledges both AI's remarkable potential and its practical limitations, while emphasizing the importance of responsible development and deployment.",
+      "tags": [
+        "AI",
+        "Innovation"
+      ],
+      "cover": {
+        "original": "/images/blog/first-hype.webp",
+        "cover": "/images/blog/first-hype-cover.webp",
+        "thumbnail": "/images/blog/first-hype-thumb.webp"
+      }
+    },
+    {
+      "title": "Digital Coworkers: How AI Assistants Are Transforming Professional Collaboration",
+      "date": "2024-03-20T12:00:00Z",
+      "slug": "second",
+      "description": "AI assistants with tool-calling capabilities are emerging as sophisticated digital coworkers, fundamentally changing how organizations operate. This article explores their transformative potential through two contrasting case studies: university operations and salmon farming. By examining how these AI systems can coordinate complex tasks across multiple platforms—from managing academic research programs to monitoring aquaculture conditions—the piece illustrates how digital coworkers complement human expertise rather than replace it. The article highlights both the practical benefits and implementation challenges, emphasizing the importance of thoughtful deployment to create more efficient, data-driven workplaces while maintaining human agency and judgment at the center of decision-making.",
+      "tags": [
+        "AI",
+        "Assistants",
+        "Salmon"
+      ],
+      "cover": {
+        "original": "/images/blog/second-test.png",
+        "cover": "/images/blog/second-test-cover.png",
+        "thumbnail": "/images/blog/second-test-thumb.png"
+      }
+    }
+  ]
+}

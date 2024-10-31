@@ -5,7 +5,7 @@ import AnimatedBackground from '@/components/ui/animated-background';
 
 const Hero = () => {
   return (
-    <Section className="relative overflow-hidden min-h-[600px] flex items-center">
+    <Section className="relative min-h-[100vh] flex items-center pt-16"> 
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-secondary-900 via-secondary-800 to-secondary-700" />
       

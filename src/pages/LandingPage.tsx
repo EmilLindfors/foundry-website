@@ -11,23 +11,11 @@ import Hero from '@/components/page-components/hero';
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-light dark:bg-dark text-light-primary dark:text-dark-primary">
-      {/* Header/Nav */}
-      <header className="relative border-b border-light dark:border-dark">
-        <Container>
-          <nav className="flex items-center justify-between h-16">
-            <div className="text-xl font-bold text-primary-500 dark:text-primary-400">
-              Lindfors Foundry
-            </div>
-            <Button variant="primary" size="sm">
-              <a href="#contact">Contact</a>
-            </Button>
-          </nav>
-        </Container>
-      </header>
-
-      {/* Hero Section */}
-      <Hero />
+    <>
+      <section className="relative min-h-[600px] bg-gradient-to-r from-secondary-900 to-secondary-700">
+        {/* Hero Section */}
+        <Hero />
+      </section>
 
       {/* Expertise Section */}
       <Section variant="alt">
@@ -59,9 +47,9 @@ const LandingPage = () => {
           <div className="md:grid md:grid-cols-2 gap-12 items-center">
             <div className="mb-8 md:mb-0">
               <div className="aspect-square rounded-layout overflow-hidden bg-light-surface dark:bg-dark-surface">
-                <img 
-                  src="/api/placeholder/800/800" 
-                  alt="Profile" 
+                <img
+                  src="/api/placeholder/800/800"
+                  alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -70,13 +58,13 @@ const LandingPage = () => {
               <h2 className="text-3xl font-bold mb-6">About Lindfors Foundry</h2>
               <div className="space-y-4 text-light-secondary dark:text-dark-secondary">
                 <p>
-                  As an independent consultant, I specialize in developing cutting-edge AI solutions 
-                  for the Norwegian aquaculture industry. With expertise in Rust programming and 
-                  artificial intelligence, I help fish farming operations optimize their processes 
+                  As an independent consultant, I specialize in developing cutting-edge AI solutions
+                  for the Norwegian aquaculture industry. With expertise in Rust programming and
+                  artificial intelligence, I help fish farming operations optimize their processes
                   and embrace sustainable technologies.
                 </p>
                 <p>
-                  Every project is handled personally, ensuring direct communication and 
+                  Every project is handled personally, ensuring direct communication and
                   tailored solutions that precisely match your needs.
                 </p>
               </div>
@@ -106,7 +94,7 @@ const LandingPage = () => {
               <FormField>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <textarea 
+                  <textarea
                     className="w-full px-4 py-2 rounded-layout border border-light dark:border-dark
                       bg-light-surface dark:bg-dark-surface
                       text-light-primary dark:text-dark-primary
@@ -147,7 +135,7 @@ const LandingPage = () => {
           </div>
         </Container>
       </footer>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,8 @@
+import { text } from 'stream/consumers';
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class', // This is important!
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -134,7 +137,7 @@ export default {
     },
   },
   plugins: [
-    // Plugin to handle dark mode variants
+    require('@tailwindcss/typography'),
     function({ addVariant }) {
       addVariant('dark-hover', '.dark &:hover');
       addVariant('light-hover', ':hover:not(.dark &)');
