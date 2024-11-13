@@ -1,6 +1,17 @@
 {
   "posts": [
     {
+      "title": "Parsing citations from zotero using rust",
+      "date": "2024-03-20T12:00:00Z",
+      "slug": "citations",
+      "description": "This is a test",
+      "tags": [
+        "Rust",
+        "Zotero"
+      ],
+      "cover": null
+    },
+    {
       "title": "The AI Revolution: Understanding Hype, Reality, and the Path Forward",
       "date": "2024-03-20T12:00:00Z",
       "slug": "first",

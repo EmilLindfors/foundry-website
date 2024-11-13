@@ -1,5 +1,6 @@
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use chrono::{DateTime, Utc};
+use citations::{parse_markdown_with_citations, CitationConfig};
 use image::ImageFormat;
 use pulldown_cmark::{Event, MetadataBlockKind, Options, Parser, Tag, TagEnd};
 use serde::{Deserialize, Serialize};
@@ -7,6 +8,9 @@ use std::fs::{self, File};
 use std::io::BufWriter;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
+mod citations;
+mod csl_client;
+mod zotero;
 
 #[derive(Serialize, Deserialize)]
 struct Post {
@@ -62,11 +66,7 @@ fn sanitize_filename(filename: &str) -> String {
     }
 }
 
-fn process_image(
-    source_path: &Path,
-    slug: &str,
-    filename: &str,
-) -> Result<Option<CoverImage>> {
+fn process_image(source_path: &Path, slug: &str, filename: &str) -> Result<Option<CoverImage>> {
     let img = image::open(source_path)
         .with_context(|| format!("Failed to open image: {}", source_path.display()))?;
 
@@ -76,16 +76,16 @@ fn process_image(
 
     // Clean up the filename by removing extension
     let base_name = sanitize_filename(filename);
-    
+
     // Get the extension from the source file, defaulting to jpg
     let ext = source_path
         .extension()
         .and_then(|e| e.to_str())
         .unwrap_or("jpg");
-    
+
     // Construct the final base name with slug
     let final_name = format!("{}-{}", slug, base_name);
-    
+
     // Define paths relative to public directory for serving
     let original_path = format!("/images/blog/{}.{}", final_name, ext);
     let cover_path = format!("/images/blog/{}-cover.{}", final_name, ext);
@@ -94,19 +94,28 @@ fn process_image(
     // Save original
     let original_file = File::create(image_dir.join(format!("{}.{}", final_name, ext)))?;
     let mut original_writer = BufWriter::new(original_file);
-    img.write_to(&mut original_writer, ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg))?;
+    img.write_to(
+        &mut original_writer,
+        ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg),
+    )?;
 
     // Create and save cover (1200px wide)
     let cover = img.resize(1200, 800, image::imageops::FilterType::Lanczos3);
     let cover_file = File::create(image_dir.join(format!("{}-cover.{}", final_name, ext)))?;
     let mut cover_writer = BufWriter::new(cover_file);
-    cover.write_to(&mut cover_writer, ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg))?;
+    cover.write_to(
+        &mut cover_writer,
+        ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg),
+    )?;
 
     // Create and save thumbnail (400px wide)
     let thumb = img.resize(400, 267, image::imageops::FilterType::Lanczos3);
     let thumb_file = File::create(image_dir.join(format!("{}-thumb.{}", final_name, ext)))?;
     let mut thumb_writer = BufWriter::new(thumb_file);
-    thumb.write_to(&mut thumb_writer, ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg))?;
+    thumb.write_to(
+        &mut thumb_writer,
+        ImageFormat::from_extension(ext).unwrap_or(ImageFormat::Jpeg),
+    )?;
 
     Ok(Some(CoverImage {
         original: original_path,
@@ -156,11 +165,50 @@ fn parse_metadata_and_content(content: &str) -> Result<(PostMetadata, String)> {
     Ok((metadata, html_output))
 }
 
-fn process_file(path: &Path, content_dir: &Path) -> Result<Post> {
+fn process_file(
+    path: &Path,
+    content_dir: &Path,
+    style: &str,
+    lang_code: &str,
+    cache_dir: Option<PathBuf>,
+    bib_path: Option<&Path>,
+    zotero_config: Option<(String, String, Option<String>)>,
+) -> Result<Post> {
     let content = fs::read_to_string(path)
         .with_context(|| format!("Failed to read file: {}", path.display()))?;
 
     let (metadata, html_content) = parse_metadata_and_content(&content)?;
+
+    // Initialize citation configuration
+    let citation_config = match (bib_path, zotero_config) {
+        (Some(bib_path), None) => CitationConfig::new(style, lang_code, bib_path, cache_dir)?,
+        (None, Some((api_key, user_id, collection_key))) => CitationConfig::from_zotero(
+            style,
+            lang_code,
+            &api_key,
+            &user_id,
+            collection_key.as_deref(),
+            cache_dir,
+        )?,
+        _ => {
+            return Err(anyhow!(
+                "Must provide either bibliography path or Zotero configuration"
+            ))
+        }
+    };
+
+    // Process the content with citations
+    let citation_result = parse_markdown_with_citations(&html_content, &citation_config)?;
+
+    // Combine content and references if there are citations
+    let html_content = if citation_result.has_citations {
+        format!(
+            "{}\n{}",
+            citation_result.html_content, citation_result.references_html
+        )
+    } else {
+        citation_result.html_content
+    };
 
     let slug = path
         .file_stem()
@@ -199,6 +247,7 @@ fn process_file(path: &Path, content_dir: &Path) -> Result<Post> {
 }
 
 fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     let content_dir = PathBuf::from("../content");
     let output_dir = PathBuf::from("../src/assets/content");
 
@@ -207,13 +256,28 @@ fn main() -> Result<()> {
 
     let mut posts = Vec::new();
 
+    let zotero_api_key = std::env::var("ZOTERO_API_KEY").ok().unwrap();
+    let zotero_user_id = std::env::var("ZOTERO_USER_ID").ok().unwrap();
+    let zotero_collection_key = std::env::var("ZOTERO_COLLECTION_KEY").ok();
     // Process all markdown files
     for entry in WalkDir::new(&content_dir)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| e.path().extension().and_then(|s| s.to_str()) == Some("md"))
     {
-        let post = process_file(entry.path(), &content_dir)?;
+        let post = process_file(
+            entry.path(),
+            &content_dir,
+            "apa-6th-edition.csl",
+            "en-US",
+            Some(PathBuf::from(".cache")),
+            None,
+            Some((
+                zotero_api_key.clone(),
+                zotero_user_id.clone(),
+                zotero_collection_key.clone()
+            )),
+        )?;
 
         // Write individual post file
         let post_path = output_dir.join(format!("{}.json", post.slug));

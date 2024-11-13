@@ -1,0 +1,11 @@
+{
+  "title": "Parsing citations from zotero using rust",
+  "date": "2024-03-20T12:00:00Z",
+  "slug": "citations",
+  "content": "<h1>hello</h1>\n<p>This is a test where i test the citation capabilties: CITATION_PLACEHOLDER_misund_opportunities_2024. It should work i guess.</p>\n\n<div class=\"references\">\n<h2>References</h2>\n<div class=\"references-list\">\n<div id=\"ref-misund_opportunities_2024\" class=\"reference-item\">Misund, A.\u001b[0m, \u001b[0mThorvaldsen, T.\u001b[0m, \u001b[0mStrand, A. V.\u001b[0m, \u001b[0mOftebro, T. L.\u001b[0m, & \u001b[0mDahle, S. W\u001b[0m. (\u001b[0m2024\u001b[0m). \u001b[0mOpportunities and challenges in new production systems for salmon farming in Norway—Industry perspective\u001b[0m. \u001b[0m\u001b[3mMarine Policy\u001b[0m, \u001b[0m\u001b[3m170\u001b[0m, \u001b[0m106394\u001b[0m. \u001b[0mhttps://doi.org/\u001b[0m10.1016/j.marpol.2024.106394\u001b[0m</div>\n</div>\n</div>\n",
+  "description": "This is a test",
+  "tags": [
+    "Rust",
+    "Zotero"
+  ]
+}
