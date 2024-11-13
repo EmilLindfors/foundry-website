@@ -5,11 +5,13 @@ import LandingPage from './pages/LandingPage';
 
 import { ThemeProvider } from '@/contexts/theme-context';
 import { NavHeader } from '@/components/navigation/nav-header';
+import { LanguageProvider } from './contexts/language-context';
 
 export default function App() {
   return (
 
     <BrowserRouter>
+     <LanguageProvider>
       <ThemeProvider>
         <div className="min-h-screen bg-light dark:bg-dark">
           <NavHeader />
@@ -20,7 +22,7 @@ export default function App() {
           </Routes>
         </div>
       </ThemeProvider>
-
+      </LanguageProvider>
     </BrowserRouter>
 
   );

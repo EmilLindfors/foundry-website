@@ -1,12 +1,13 @@
-import { Button } from '@/components/ui/button';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import { FeatureCard } from '@/components/ui/feature-card';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { FormField, FormLabel, FormControl } from '@/components/ui/form';
+
 import { Microchip, Brain, Fish, Github, Linkedin } from 'lucide-react';
 import Hero from '@/components/page-components/hero';
+import { FormField, FormLabel, FormControl, FormMessage, FormRoot, FormSubmit, TextArea, Select } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+
 
 
 const LandingPage = () => {
@@ -79,35 +80,51 @@ const LandingPage = () => {
           <h2 className="text-3xl font-bold mb-12 text-center">Get in Touch</h2>
           <Card>
             <CardContent className="space-y-6">
-              <FormField>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your name" />
-                </FormControl>
-              </FormField>
-              <FormField>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Enter your email" />
-                </FormControl>
-              </FormField>
-              <FormField>
-                <FormLabel>Message</FormLabel>
-                <FormControl>
-                  <textarea
-                    className="w-full px-4 py-2 rounded-layout border border-light dark:border-dark
-                      bg-light-surface dark:bg-dark-surface
-                      text-light-primary dark:text-dark-primary
-                      focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:focus:ring-primary-400/50
-                      transition-theme duration-theme
-                      min-h-[150px]"
-                    placeholder="Your message"
-                  />
-                </FormControl>
-              </FormField>
-              <Button className="w-full" variant="primary">
-                Send Message
-              </Button>
+              <FormRoot>
+                <FormField name="email" className='py-4'>
+                  <div className="flex justify-between items-baseline">
+                    <FormLabel>Email</FormLabel>
+                    <FormMessage match="valueMissing">Please enter your email</FormMessage>
+                    <FormMessage match="typeMismatch">Please provide a valid email</FormMessage>
+                  </div>
+                  <FormControl>
+                    <Input type="email" required name="email" />
+                  </FormControl>
+                </FormField>
+                <FormField name="enquiryType" className='py-4'>
+                  <div className="flex justify-between items-baseline">
+                    <FormLabel>Type of Enquiry</FormLabel>
+                    <FormMessage match="valueMissing">Please enter your type of enquiry</FormMessage>
+                    <FormMessage match="typeMismatch">Please provide a valid enquiry</FormMessage>
+                  </div>
+                  <FormControl>
+                    <Select
+                      name="enquiryType"
+                      options={[
+                        { value: 'general', label: 'General Enquiry' },
+                        { value: 'project', label: 'Project Inquiry' },
+                        { value: 'question', label: 'Question' },
+                      ]}
+                      required
+                    />
+                  </FormControl>
+                </FormField>
+                <FormField name="question">
+                  <div className="flex justify-between items-baseline">
+                    <FormLabel>Question</FormLabel>
+                    <FormMessage match="valueMissing">Please enter a question</FormMessage>
+                  </div>
+                  <FormControl>
+                    <TextArea name="question" className="Textarea" required />
+                  </FormControl>
+                </FormField>
+
+                <div className="flex justify-end mt-4">
+                <FormSubmit type="submit" >
+                  Send Message
+                </FormSubmit>
+                </div>
+              </FormRoot>
             </CardContent>
           </Card>
         </Container>

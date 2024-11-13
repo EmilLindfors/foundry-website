@@ -1,0 +1,112 @@
+{
+  "en": {
+    "hero": {
+      "title": "AI Solutions for Norwegian Aquaculture",
+      "description": "Specialized Rust-based AI consulting for the future of sustainable fish farming",
+      "learnMore": "Learn More",
+      "contactUs": "Contact Us"
+    },
+    "nav": {
+      "projects": {
+        "label": "Projects",
+        "items": [
+          {
+            "title": "Featured Projects",
+            "href": "/projects",
+            "description": "View our showcase of featured projects"
+          },
+          {
+            "title": "Open Source",
+            "href": "/projects/open-source",
+            "description": "Explore our open source contributions"
+          }
+        ],
+        "callout": {
+          "title": "Lindfors Foundry",
+          "description": "Read more about us",
+          "href": "/about"
+        }
+      },
+      "blog": {
+        "label": "Blog",
+        "href": "/blog",
+        "items": [
+          {
+            "title": "All Posts",
+            "href": "/blog",
+            "description": "View all blog posts"
+          },
+          {
+            "title": "Categories",
+            "href": "/blog/categories",
+            "description": "Explore blog categories"
+          },
+          {
+            "title": "Tags",
+            "href": "/blog/tags",
+            "description": "Discover blog tags"
+          }
+        ]
+      },
+      "about": {
+        "label": "About",
+        "href": "/about"
+      }
+    }
+  },
+  "no": {
+    "hero": {
+      "title": "AI-løsninger for norsk havbruk",
+      "description": "Spesialisert Rust-basert AI-rådgivning for fremtidens bærekraftige fiskeoppdrett",
+      "learnMore": "Lær mer",
+      "contactUs": "Kontakt oss"
+    },
+    "nav": {
+      "projects": {
+        "label": "Prosjekter",
+        "items": [
+          {
+            "title": "Utvalgte Prosjekter",
+            "href": "/projects",
+            "description": "Se vårt utvalg av utvalgte prosjekter"
+          },
+          {
+            "title": "Åpen Kildekode",
+            "href": "/projects/open-source",
+            "description": "Utforsk våre bidrag til åpen kildekode"
+          }
+        ],
+        "callout": {
+          "title": "Lindfors Foundry",
+          "description": "Les mer om oss",
+          "href": "/about"
+        }
+      },
+      "blog": {
+        "label": "Blogg",
+        "href": "/blog",
+        "items": [
+          {
+            "title": "Alle Innlegg",
+            "href": "/blog",
+            "description": "Se alle blogginnlegg"
+          },
+          {
+            "title": "Kategorier",
+            "href": "/blog/categories",
+            "description": "Utforsk bloggkategorier"
+          },
+          {
+            "title": "Stikkord",
+            "href": "/blog/tags",
+            "description": "Oppdag bloggstikkord"
+          }
+        ]
+      },
+      "about": {
+        "label": "Om",
+        "href": "/about"
+      }
+    }
+  }
+}

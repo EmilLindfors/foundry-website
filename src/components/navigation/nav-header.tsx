@@ -1,34 +1,24 @@
-// components/navigation/nav-header.tsx
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Container } from '@/components/ui/container';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/theme-context';
-
-interface NavItem {
-  label: string;
-  href: string;
-}
-
-const navItems: NavItem[] = [
-  { label: 'Blog', href: '/blog' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
+import { NavigationMenu } from '@/components/ui/navigation-menu';
+import { LanguageSwitcher } from '@/components/ui/language-switcher';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function NavHeader() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isScrolled, setIsScrolled] = React.useState(false);
+  const { t } = useTranslation();
+  const navItems: Record<string, any> = t('nav');
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const location = useLocation();
 
-  const isLandingPage = location.pathname === '/';
+  const isLandingPage: boolean = location.pathname === '/';
 
   // Add scroll listener to handle background transparency
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
@@ -41,13 +31,12 @@ export function NavHeader() {
     }
   }, [isLandingPage]);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
   const theme = useTheme();
 
   return (
-    <header 
+    <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-colors duration-200',
         isLandingPage && !isScrolled
@@ -57,97 +46,40 @@ export function NavHeader() {
       )}
     >
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="pt-4 md:pt-0 h-auto gap-4 md:h-16 flex-row flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
             className={cn(
-              "text-2xl font-bold transition-colors duration-200",
-              isLandingPage && !isScrolled
-                ? 'text-white'
-                : 'text-primary-500 dark:text-primary-400'
+              "flex gap-2 items-center text-2xl font-bold transition-colors duration-200 sm:min-w-auto md:min-w-[200px], z-10",
+              isLandingPage && !isScrolled || theme.theme === 'dark'
+                ? 'text-white hover:text-light-teritary'
+                : 'text-dark hover:text-dark-tertiary',
             )}
             onClick={closeMenu}
           >
-         <img src= {isLandingPage && !isScrolled || theme.theme === 'dark' ? 'logo_dark.png' : 'logo_light.png'} alt="Lindfors Foundry" className="h-8" />
+            <img width={36} height={36} src={isLandingPage && !isScrolled || theme.theme === 'dark' ? './LF_180_white.svg' : './LF_180.svg'} alt="LF" />
+
+            <span className="text-lg font-bold hidden md:block text-nowrap">Lindfors Foundry</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={cn(
-                  'text-sm font-medium transition-colors',
-                  isLandingPage && !isScrolled
-                    ? 'text-white/80 hover:text-white'
-                    : cn(
-                      'hover:text-primary-500 dark:hover:text-primary-400',
-                      location.pathname === item.href
-                        ? 'text-primary-500 dark:text-primary-400'
-                        : 'text-light-secondary dark:text-dark-secondary'
-                    )
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <NavigationMenu landingPage={isLandingPage && !isScrolled} items={Object.values(navItems)} />
 
           {/* Right Section */}
           <div className="flex items-center gap-4">
             <ThemeToggle
               className={cn(
-                isLandingPage && !isScrolled && 'text-white hover:bg-white/10'
+                isLandingPage && !isScrolled && 'text-white hover:bg-white/10', "z-10"
               )}
             />
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <LanguageSwitcher
               className={cn(
-                "md:hidden",
-                isLandingPage && !isScrolled && 'text-white hover:bg-white/10'
+                isLandingPage && !isScrolled && 'text-white hover:bg-white/10', "z-10"
               )}
-              onClick={toggleMenu}
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            >
-              {isMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
+            />
           </div>
         </div>
       </Container>
-
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden border-t border-light dark:border-dark bg-light dark:bg-dark">
-          <Container>
-            <nav className="flex flex-col py-4 space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary-500 dark:hover:text-primary-400 px-2 py-1 rounded-md',
-                    location.pathname === item.href
-                      ? 'text-primary-500 dark:text-primary-400 bg-light-surface dark:bg-dark-surface'
-                      : 'text-light-secondary dark:text-dark-secondary'
-                  )}
-                  onClick={closeMenu}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </Container>
-        </div>
-      )}
     </header>
   );
 }

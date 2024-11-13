@@ -1,5 +1,3 @@
-import { text } from 'stream/consumers';
-
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class', // This is important!
@@ -77,6 +75,18 @@ export default {
           500: '#17A2B8', // Base info color
           600: '#138A9C',
           700: '#0F7285',
+        },
+        light: {
+          DEFAULT: '#FFFFFF',
+          surface: '#F4F4F5',
+          primary: '#18181B',
+          secondary: '#71717A'
+        },
+        dark: {
+          DEFAULT: '#18181B',
+          surface: '#27272A',
+          primary: '#FFFFFF',
+          secondary: '#A1A1AA'
         }
       },
       // Theme-specific background colors
@@ -134,11 +144,67 @@ export default {
       transitionDuration: {
         'theme': '200ms',
       },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        fadeOut: {
+          from: { opacity: 1 },
+          to: { opacity: 0 }
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+        enterFromRight: {
+          from: { opacity: 0, transform: 'translateX(200px)' },
+          to: { opacity: 1, transform: 'translateX(0)' }
+        },
+        enterFromLeft: {
+          from: { opacity: 0, transform: 'translateX(-200px)' },
+          to: { opacity: 1, transform: 'translateX(0)' }
+        },
+        exitToRight: {
+          from: { opacity: 1, transform: 'translateX(0)' },
+          to: { opacity: 0, transform: 'translateX(200px)' }
+        },
+        exitToLeft: {
+          from: { opacity: 1, transform: 'translateX(0)' },
+          to: { opacity: 0, transform: 'translateX(-200px)' }
+        }
+      },
+      animation: {
+        enterFromLeft: 'enterFromLeft 250ms ease',
+        enterFromRight: 'enterFromRight 250ms ease',
+        exitToLeft: 'exitToLeft 250ms ease',
+        exitToRight: 'exitToRight 250ms ease',
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        fadeIn: "fadeIn 200ms ease",
+        fadeOut: "fadeOut 200ms ease",
+        "fade-in-up": "fadeInUp 200ms ease",
+        "fade-in-up-fast": "fadeInUp 0.3s ease-out forwards",
+        "fade-in-up-slow":
+          "fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards",
+        shimmer: "shimmer 2s linear infinite",
+      },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    function({ addVariant }) {
+    require('@tailwindcss/typography'), require("tailwindcss-animate"),
+    function ({ addVariant }) {
       addVariant('dark-hover', '.dark &:hover');
       addVariant('light-hover', ':hover:not(.dark &)');
     },

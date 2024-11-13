@@ -2,8 +2,12 @@ import { Container } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
 import { Section } from '@/components/ui/section';
 import AnimatedBackground from '@/components/ui/animated-background';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Hero = () => {
+  const { t } = useTranslation();
+  const heroTranslations = t('hero');
+
   return (
     <Section className="relative min-h-[100vh] flex items-center pt-16"> 
       {/* Gradient Background */}
@@ -17,20 +21,20 @@ const Hero = () => {
       />
 
       {/* Content */}
-      <Container className="relative z-10">
+      <Container className="relative z-10 text-center md:text-left">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white [text-wrap:balance]">
-            AI Solutions for Norwegian Aquaculture
+            {heroTranslations.title}
           </h1>
           <p className="text-xl mb-8 text-secondary-50">
-            Specialized Rust-based AI consulting for the future of sustainable fish farming
+            {heroTranslations.description}
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 justify-center md:justify-start">
             <Button variant="primary" size="lg">
-              Learn More
+              {heroTranslations.learnMore}
             </Button>
             <Button variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
-              Contact Us
+              {heroTranslations.contactUs}
             </Button>
           </div>
         </div>

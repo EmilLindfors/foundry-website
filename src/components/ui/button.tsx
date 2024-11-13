@@ -33,7 +33,7 @@ const styles = {
 };
 
 // Button Props
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof styles.variants;
   size?: keyof typeof styles.sizes;
   leftIcon?: React.ReactNode;
