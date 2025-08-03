@@ -1,0 +1,30 @@
+# Site Builder Configuration
+
+# Input and output directories
+content_dir: "../content"
+output_dir: "../src/assets/content"
+public_dir: "../public"
+
+# Citation settings
+citations:
+  style: "apa-6th-edition.csl"
+  language_code: "en-US"
+  # Optional: bibliography_path: "../content/bibliography.bib"
+  zotero:
+    # These can be overridden by environment variables
+    # api_key: "your-api-key"
+    # user_id: "your-user-id"
+    # collection_key: "optional-collection-key"
+
+# Image processing settings
+images:
+  cover_width: 1200
+  cover_height: 800
+  thumbnail_width: 400
+  thumbnail_height: 267
+  filter_type: "Lanczos3"  # Options: Nearest, Triangle, CatmullRom, Gaussian, Lanczos3
+
+# Cache settings
+cache:
+  directory: ".cache"
+  enabled: true

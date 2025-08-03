@@ -5,11 +5,10 @@ use hayagriva::{
 };
 use pulldown_cmark::{Event, Options, Parser};
 use std::{
-    cell::{Ref, RefCell},
+    cell::RefCell,
     collections::{HashMap, HashSet},
     fs,
     path::{Path, PathBuf},
-    rc::Rc,
 };
 
 use crate::csl_client::CslClient;
@@ -138,9 +137,9 @@ pub fn parse_markdown_with_citations(
                     &config.locales,
                 ));
 
-                format!("CITATION_PLACEHOLDER_{}", key)
+                format!("CITATION_PLACEHOLDER_{key}")
             } else {
-                format!("[Unknown citation: {}]", key)
+                format!("[Unknown citation: {key}]")
             }
         });
 
@@ -166,9 +165,9 @@ pub fn parse_markdown_with_citations(
             .0
             .iter()
             .map(|c| match c {
-                ElemChild::Transparent { cite_idx, format } => {
+                ElemChild::Transparent { cite_idx, format: _ } => {
                     let key = &cite.citation.0[*cite_idx];
-                    Some(format!("{}", key))
+                    Some(format!("{key}"))
                 }
                 _ => None,
             })
@@ -176,11 +175,10 @@ pub fn parse_markdown_with_citations(
 
         if let Some(key) = key {
             citations.insert(
-                format!("CITATION_PLACEHOLDER_{}", key),
+                format!("CITATION_PLACEHOLDER_{key}"),
                 format!(
-                    "<a href=\"#ref-{}\" class=\"citation\">{}</a>",
-                    key,
-                    cite.citation.to_string()
+                    "<a href=\"#ref-{key}\" class=\"citation\">{}</a>",
+                    cite.citation
                 ),
             );
         }

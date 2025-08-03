@@ -16,6 +16,7 @@ pub struct ZoteroClient {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 enum LibraryType {
     User,
     Group,
@@ -42,37 +43,35 @@ impl ZoteroClient {
         })
     }
 
+    #[allow(dead_code)]
     pub fn with_group(api_key: String, group_id: String) -> Result<Self> {
         let mut client = Self::new(api_key, group_id)?;
         client.library_type = LibraryType::Group;
         Ok(client)
     }
 
+    #[allow(dead_code)]
     pub fn fetch_library(&self, collection_key: Option<&str>) -> Result<Library> {
         // Construct the API endpoint
         let endpoint = match self.library_type {
             LibraryType::User => {
                 if let Some(collection) = collection_key {
-                    format!("{}users/{}/collections/{}/items", 
-                        ZOTERO_API_BASE, self.library_id, collection)
+                    format!("{ZOTERO_API_BASE}users/{}/collections/{collection}/items", self.library_id)
                 } else {
-                    format!("{}users/{}/items", 
-                        ZOTERO_API_BASE, self.library_id)
+                    format!("{ZOTERO_API_BASE}users/{}/items", self.library_id)
                 }
             },
             LibraryType::Group => {
                 if let Some(collection) = collection_key {
-                    format!("{}groups/{}/collections/{}/items", 
-                        ZOTERO_API_BASE, self.library_id, collection)
+                    format!("{ZOTERO_API_BASE}groups/{}/collections/{collection}/items", self.library_id)
                 } else {
-                    format!("{}groups/{}/items", 
-                        ZOTERO_API_BASE, self.library_id)
+                    format!("{ZOTERO_API_BASE}groups/{}/items", self.library_id)
                 }
             }
         };
 
         // Add format parameter and limit
-        let endpoint = format!("{}?format=biblatex&limit=100", endpoint);
+        let endpoint = format!("{endpoint}?format=biblatex&limit=100");
 
         // Fetch the BibTeX data
         let response = self.client
@@ -93,7 +92,7 @@ impl ZoteroClient {
             .text()
             .context("Failed to get response text")?;
 
-        println!("Fetched Zotero library: {:?}", bibtex_str);
+        println!("Fetched Zotero library: {bibtex_str:?}");
 
         // Parse the BibTeX into a Bibliography
         hayagriva::io::from_biblatex_str(&bibtex_str)
@@ -110,20 +109,16 @@ impl ZoteroClient {
             let endpoint = match self.library_type {
                 LibraryType::User => {
                     if let Some(collection) = collection_key {
-                        format!("{}users/{}/collections/{}/items?start={}&limit={}&format=bibtex", 
-                            ZOTERO_API_BASE, self.library_id, collection, start, LIMIT)
+                        format!("{ZOTERO_API_BASE}users/{}/collections/{collection}/items?start={start}&limit={LIMIT}&format=bibtex", self.library_id)
                     } else {
-                        format!("{}users/{}/items?start={}&limit={}&format=bibtex", 
-                            ZOTERO_API_BASE, self.library_id, start, LIMIT)
+                        format!("{ZOTERO_API_BASE}users/{}/items?start={start}&limit={LIMIT}&format=bibtex", self.library_id)
                     }
                 },
                 LibraryType::Group => {
                     if let Some(collection) = collection_key {
-                        format!("{}groups/{}/collections/{}/items?start={}&limit={}&format=bibtex", 
-                            ZOTERO_API_BASE, self.library_id, collection, start, LIMIT)
+                        format!("{ZOTERO_API_BASE}groups/{}/collections/{collection}/items?start={start}&limit={LIMIT}&format=bibtex", self.library_id)
                     } else {
-                        format!("{}groups/{}/items?start={}&limit={}&format=bibtex", 
-                            ZOTERO_API_BASE, self.library_id, start, LIMIT)
+                        format!("{ZOTERO_API_BASE}groups/{}/items?start={start}&limit={LIMIT}&format=bibtex", self.library_id)
                     }
                 }
             };
@@ -156,7 +151,7 @@ impl ZoteroClient {
                 .text()
                 .context("Failed to get response text")?;
 
-            println!("Fetched Zotero library page: {:?}", bibtex_str);
+            println!("Fetched Zotero library page: {bibtex_str:?}");
 
             // Parse the BibTeX and add to our bibliography
             if !bibtex_str.is_empty() {
@@ -218,6 +213,7 @@ impl CitationConfig {
         })
     }
 
+    #[allow(dead_code)]
     pub async fn from_zotero_group(
         style_path: &Path,
         locale_path: &Path,
@@ -263,8 +259,7 @@ mod tests {
         let zotero = ZoteroClient::new(api_key, user_id
             .to_string()).unwrap();
 
-        let endpoint = format!("{}users/{}/items", 
-            ZOTERO_API_BASE, user_id);
+        let endpoint = format!("{ZOTERO_API_BASE}users/{user_id}/items");
 
 
         let response = zotero.client
