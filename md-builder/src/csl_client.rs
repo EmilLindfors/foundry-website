@@ -11,6 +11,7 @@ const CSL_STYLES_BASE: &str = "https://raw.githubusercontent.com/citation-style-
 const STYLES_LIST_URL: &str = "https://raw.githubusercontent.com/citation-style-language/styles/master/style-metadata.json";
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 pub struct StyleMetadata {
     pub name: String,
     pub title: String,
@@ -20,6 +21,7 @@ pub struct StyleMetadata {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 struct CacheMetadata {
     downloaded_at: SystemTime,
     etag: Option<String>,
@@ -27,6 +29,7 @@ struct CacheMetadata {
 
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct CitationConfig {
     pub style: IndependentStyle,
     pub locales: Vec<Locale>,
@@ -56,6 +59,7 @@ impl CslClient {
         })
     }
 
+    #[allow(dead_code)]
     pub fn with_cache_duration(mut self, duration: Duration) -> Self {
         self.cache_duration = duration;
         self
@@ -63,7 +67,7 @@ impl CslClient {
 
     // Fetch and parse a locale file
     pub fn get_locale(&self, lang_code: &str) -> Result<LocaleFile> {
-        let cache_path = self.cache_dir.join("locales").join(format!("{}.xml", lang_code));
+        let cache_path = self.cache_dir.join("locales").join(format!("{lang_code}.xml"));
         let meta_path = cache_path.with_extension("meta");
 
         // Check cache first
@@ -77,7 +81,7 @@ impl CslClient {
         }
 
         // Fetch from GitHub
-        let url = format!("{}{}.xml", CSL_LOCALES_BASE, lang_code);
+        let url = format!("{CSL_LOCALES_BASE}{lang_code}.xml");
         let response = self.client.get(&url)
             .send()
             .context("Failed to fetch locale file")?;
@@ -86,7 +90,7 @@ impl CslClient {
             return Err(anyhow!("Failed to download locale file: HTTP {}", response.status()));
         }
 
-        let headers = response.headers();
+        let _headers = response.headers();
 
         let content = response.text()
             .context("Failed to read locale file content")?;
@@ -105,7 +109,7 @@ impl CslClient {
     // Fetch and parse a style file
     pub fn get_style(&self, style_name: &str) -> Result<IndependentStyle> {
         let style_name = if !style_name.ends_with(".csl") {
-            format!("{}.csl", style_name)
+            format!("{style_name}.csl")
         } else {
             style_name.to_string()
         };
@@ -124,7 +128,7 @@ impl CslClient {
         }
 
         // Fetch from GitHub
-        let url = format!("{}{}", CSL_STYLES_BASE, style_name);
+        let url = format!("{CSL_STYLES_BASE}{style_name}");
         let response = self.client.get(&url)
             .send()
             .context("Failed to fetch style file")?;
@@ -148,6 +152,7 @@ impl CslClient {
     }
 
     // Get list of available styles with metadata
+    #[allow(dead_code)]
     pub fn list_styles(&self) -> Result<Vec<StyleMetadata>> {
         let cache_path = self.cache_dir.join("styles-list.json");
         let meta_path = cache_path.with_extension("meta");
@@ -186,6 +191,7 @@ impl CslClient {
     }
 
     // Find a style by name or title (case-insensitive partial match)
+    #[allow(dead_code)]
     pub fn find_styles(&self, query: &str) -> Result<Vec<StyleMetadata>> {
         let query = query.to_lowercase();
         let styles = self.list_styles()?;
@@ -199,6 +205,7 @@ impl CslClient {
     }
 
     // Clean up old cache entries
+    #[allow(dead_code)]
     pub fn clean_cache(&self) -> Result<()> {
         self.clean_cache_dir(self.cache_dir.join("locales"))?;
         self.clean_cache_dir(self.cache_dir.join("styles"))?;
@@ -206,6 +213,7 @@ impl CslClient {
     }
 
     // Helper function to clean a cache directory
+    #[allow(dead_code)]
     fn clean_cache_dir(&self, dir: PathBuf) -> Result<()> {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
@@ -235,6 +243,7 @@ impl CslClient {
     }
 
     // Helper function to write cache metadata
+    #[allow(dead_code)]
     fn write_cache_metadata(&self, path: &Path, headers: &reqwest::header::HeaderMap) -> Result<()> {
         let metadata = CacheMetadata {
             downloaded_at: SystemTime::now(),
